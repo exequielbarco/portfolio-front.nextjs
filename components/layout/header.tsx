@@ -23,8 +23,8 @@ export function Header({ navItems }: HeaderProps) {
           <div className="flex h-8 w-8 items-center justify-center rounded-full border text-sm font-bold bg-primary text-neutral-50">
             EB
           </div>
-          <span className="text-2xl font-bold tracking-normal text-primary">
-            Exequiel Barco
+          <span className="text-lg font-bold tracking-normal text-primary">
+            exequielbarco.com
           </span>
         </Link>
 
@@ -40,7 +40,6 @@ export function Header({ navItems }: HeaderProps) {
           ))}
         </nav>
 
-        {/* Mobile nav */}
         <div className="flex items-center gap-2 sm:hidden">
           <Sheet>
             <SheetTrigger asChild>

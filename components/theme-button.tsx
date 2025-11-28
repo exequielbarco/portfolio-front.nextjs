@@ -24,7 +24,7 @@ export function ThemeButton() {
   // Mientras no montó, renderizamos algo "neutral" que no dependa de theme
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" aria-label="Cambiar tema">
+      <Button variant="outline" size="icon" aria-label="Cambiar tema">
         <Moon className="h-4 w-4" />
       </Button>
     );
@@ -32,7 +32,7 @@ export function ThemeButton() {
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="icon"
       onClick={handleClick}
       aria-label="Cambiar tema"

@@ -4,10 +4,9 @@ import { Footer } from "./footer";
 import { NavItem } from "@/types/navigation";
 
 const navItems = [
-  { href: "#about", label: "About" },
-  { href: "#experience", label: "Experience" },
-  { href: "#skills", label: "Skills" },
-] satisfies NavItem[]; // Optional but extra safe
+  { href: "/experience", label: "Experience" },
+  { href: "/projects", label: "Projects" },
+] satisfies NavItem[];
 
 export function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
