@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import {
   Sheet,
@@ -13,25 +12,22 @@ import { Menu } from "lucide-react";
 import { NavItem } from "@/types/navigation";
 
 type HeaderProps = {
-  id?: string;
   navItems: NavItem[];
 } & React.PropsWithChildren;
 
-export function Header({ id, navItems }: HeaderProps) {
+export function Header({ navItems }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b bg-accent backdrop-blur">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-4 sm:px-6">
-        {/* Logo / Name */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full border text-sm font-semibold">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full border text-sm font-bold bg-primary text-neutral-50">
             EB
           </div>
-          <span className="text-sm font-medium tracking-tight sm:text-base">
+          <span className="text-2xl font-bold tracking-normal text-primary">
             Exequiel Barco
           </span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-sm font-medium sm:flex">
           {navItems.map((item) => (
             <Link

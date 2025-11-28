@@ -1,12 +1,24 @@
 {
-  "name": "exequielbarco.com",
+  "name": "porfolio-front.nextjs",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "author": "Exequiel Barco <info@exequielbarco.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exequielbarco/portfolio-front.nextjs"
+  },
+  "bugs": {
+    "url": "https://github.com/exequielbarco/portfolio-front.nextjs/issues"
+  },
+  "homepage": "https://exequielbarco.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

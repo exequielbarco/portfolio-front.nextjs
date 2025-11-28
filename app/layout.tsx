@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { Geist, Roboto } from "next/font/google";
+
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { ThemeToggler } from "@/components/theme-toogler";
 
 export const metadata: Metadata = {
   title: "Porfolio Web Developer - Barco Exequiel Alejandro",
@@ -20,18 +21,31 @@ export const metadata: Metadata = {
   manifest: "/favicon/site.webmanifest",
 };
 
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+});
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist-sans",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html
+      lang="es"
+      suppressHydrationWarning
+      className={`${geist.variable} ${roboto.variable}`}
+    >
       <body
-        className="
-        min-h-screen bg-background text-foreground
-        antialiased font-sans overflow-x-hidden
-        selection:bg-primary/20 selection:text-primary"
+        className={`min-h-screen bg-background text-foreground
+        antialiased overflow-x-hidden font-roboto
+        selection:bg-primary/20 selection:text-primary`}
       >
         <ThemeProvider
           attribute="class"
@@ -39,12 +53,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ThemeToggler />
           {children}
-
-          {/*<QueryClientProvider>
-          <Toaster /> */}
-          {/*  </QueryClientProvider>  */}
         </ThemeProvider>
       </body>
     </html>

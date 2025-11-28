@@ -7,7 +7,7 @@ type PageSectionProps = {
 
 export function PageSection({ id, className, children }: PageSectionProps) {
   return (
-    <section id={id} className={cn("scroll-mt-24 py-10 sm:py-16", className)}>
+    <section id={id} className={cn("scroll-mt-24 py-8 sm:py-12", className)}>
       {children}
     </section>
   );
