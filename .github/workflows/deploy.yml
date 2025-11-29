@@ -1,4 +1,4 @@
-name: Deploy a Servidor Portfolio
+name: Deploy Front-End
 
 on:
   push:
@@ -12,40 +12,22 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Construir Proyecto
-        run: |
-          npm install
-          npm run build
-
-      - name: Limpiar carpeta de build en el servidor
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Build y Publicar Docker Image
+        uses: docker/build-push-action@v6
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/portfolio-front.nextjs:latest
+          labels: |
+            org.opencontainers.image.source=${{ github.repository }}
+
+      - name: Deploy a VPS por SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd /home/${{ secrets.SSH_USER }}/deploy/frontend
-            rm -rf build/*
-            mkdir -p build
-
-      - name: Cargar el Build al servidor
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          source: "build/*"
-          target: "/home/${{ secrets.SSH_USER }}/deploy/frontend/build"
-
-      - name: Deployar con Docker
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd /home/${{ secrets.SSH_USER }}/deploy
-            docker compose up -d --build
+            cd /srv/portfolio
+            docker compose pull portfolio
+            docker compose up -d
