@@ -5,13 +5,13 @@ services:
     image: traefik:v3.3
     container_name: traefik
     command:
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=info@exequielbarco.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.myresolver.acme.tlschallenge=true
+      - --certificatesresolvers.myresolver.acme.email=info@exequielbarco.com
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
     ports:
       - "80:80"
       - "443:443"
@@ -24,18 +24,18 @@ services:
 
   portfolio:
     image: ghcr.io/exequielbarco/portfolio-front.nextjs:latest
-    container_name: portfolio-front
+    container_name: portfolio-front-nextjs
     env_file:
       - .env
     networks:
       - proxy
     restart: always
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portfolio.rule=Host(`exequielbarco.com`)"
-      - "traefik.http.routers.portfolio.entrypoints=websecure"
-      - "traefik.http.routers.portfolio.tls.certresolver=myresolver"
-      - "traefik.http.services.portfolio.loadbalancer.server.port=3000"
+      traefik.enable: "true"
+      traefik.http.routers.portfolio.rule: "Host(`exequielbarco.com`)"
+      traefik.http.routers.portfolio.entrypoints: "websecure"
+      traefik.http.routers.portfolio.tls.certresolver: "myresolver"
+      traefik.http.services.portfolio.loadbalancer.server.port: "3000"
 
 networks:
   proxy:
