@@ -1,5 +1,6 @@
 import { PublicLayout } from "@/components/layout/public-layout";
-import { ThemeToggler } from "@/components/theme-toogler";
+import { LanguageToggler } from "@/components/providers/togglers/language/language-toggler";
+import { ThemeToggler } from "@/components/providers/togglers/theme/theme-toogler";
 
 export default function PublicRootLayout({
   children,
@@ -9,6 +10,7 @@ export default function PublicRootLayout({
   return (
     <PublicLayout>
       <ThemeToggler />
+      <LanguageToggler />
       {children}
     </PublicLayout>
   );
