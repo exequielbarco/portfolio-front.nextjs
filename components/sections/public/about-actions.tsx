@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const AboutActions = () => {
   return (
-    <div className="mt-10 flex justify-center gap-4 flex-wrap">
+    <div className="mt-4 flex justify-center gap-4 flex-wrap">
       <Button variant="secondary" asChild>
         <Link href="mailto:info@exequielbarco.com">
           <Mail className="mr-2 h-4 w-4" />

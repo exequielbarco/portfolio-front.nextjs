@@ -30,5 +30,7 @@ export async function apiFetch<T>(
     throw new Error(`API error ${res.status}`);
   }
 
-  return res.json() as Promise<T>;
+  const data: T = await res.json();
+
+  return data;
 }
