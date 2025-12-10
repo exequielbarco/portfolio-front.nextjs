@@ -1,55 +1,43 @@
-name: Deploy Front-End
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: traefik-front
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.myresolver.acm.tlschallenge=true
+      - --certificatesresolvers.myresolver.acm.email=info@exequielbarco.com
+      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - letsencrypt:letsencrypt
+    networks:
+      - proxy
 
-on:
-  push:
-    branches: ["main"]
+  portfolio:
+    image: ghcr.io/exequielbarco/portfolio-front.nextjs:latest
+    container_name: portfolio-front.nextjs
+    env_file:
+      - .env_file
+    networks:
+      - proxy
+    restart:
+      - always
+    labels:
+      - traefik.enable: "true"
+      - traefik.http.routers.portfolio.rule: "Host(`exequielbarco.com`)"
+      - traefik.http.routers.portfolio.entrypoints: "websecure"
+      - traefik.http.routers.portfolio.tls.certresolvers: "myresolver"
+      - traefik.http.services.portfolio.loadbalancer.server.port: "3000"
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+networks:
+  proxy:
+    driver: bridge
 
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build & Push Docker Image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/portfolio-front.nextjs:latest
-          labels: |
-            org.opencontainers.image.source=${{ github.repository }}
-
-      - name: Sync docker-compose.yml to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "docker-compose.yml"
-          target: "/srv/portfolio/"
-
-      - name: Deploy to VPS via SSH
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          port: ${{ secrets.SSH_PORT }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /srv/portfolio
-            docker compose pull
-            docker compose up -d --remove-orphans
+volumes:
+  letsencrypt
