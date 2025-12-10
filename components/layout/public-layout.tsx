@@ -4,6 +4,7 @@ import { Footer } from "./footer";
 import { NavItem } from "@/types/navigation";
 
 const navItems = [
+  { href: "/", label: "Home" },
   { href: "/experience", label: "Experience" },
   { href: "/projects", label: "Projects" },
 ] satisfies NavItem[];

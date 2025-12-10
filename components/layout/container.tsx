@@ -5,7 +5,7 @@ export function Container({
   children,
 }: React.PropsWithChildren<{ className?: string }>) {
   return (
-    <div className={cn("mx-auto w-full max-w-2xl px-8 sm:px-8", className)}>
+    <div className={cn("mx-auto w-full max-w-2xl px-4", className)}>
       {children}
     </div>
   );

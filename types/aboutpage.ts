@@ -1,4 +1,6 @@
 export type AboutPage = {
+  id: number;
+  language: "es" | "en";
   first_name: string;
   last_name: string;
   additional_name: string;

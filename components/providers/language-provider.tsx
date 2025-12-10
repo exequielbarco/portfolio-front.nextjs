@@ -1,14 +1,10 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  ReactNode,
-} from "react";
+import { useRouter } from "next/navigation";
 
-type Language = "es" | "en";
+import { createContext, useContext, useState, ReactNode } from "react";
+
+export type Language = "es" | "en";
 
 type LanguageContextType = {
   language: Language;
@@ -20,36 +16,30 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
   undefined
 );
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("es");
+export function LanguageProvider({
+  children,
+  initialLanguage,
+}: {
+  children: ReactNode;
+  initialLanguage: Language;
+}) {
+  const router = useRouter();
+  const [language, setLanguage] = useState<Language>(initialLanguage);
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem("language") as Language | null;
-    if (stored === "es" || stored === "en") {
-      setLanguage(stored);
-    }
-
-    const browserLang = navigator.language || (navigator.languages && navigator.languages[0]) || "en";
-
-    const normalized = browserLang.toLowerCase();
-
-    if (normalized.startsWith("es")) {
-      setLanguage("es")
-    } else {
-      setLanguage("en")
-    }
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem("language", language);
-  }, [language]);
+  const changeLanguage = (lang: Language) => {
+    setLanguage(lang);
+    document.cookie = `language=${lang}; path=/; max-age=31536000`;
+    router.refresh();
+  };
 
   const toggleLanguage = () => {
-    setLanguage((prev) => (prev === "es" ? "en" : "es"));
+    changeLanguage(language === "es" ? "en" : "es");
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage: changeLanguage, toggleLanguage }}
+    >
       {children}
     </LanguageContext.Provider>
   );

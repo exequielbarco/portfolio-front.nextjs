@@ -56,7 +56,7 @@ export function LanguageButton() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-0">
-        <Command>
+        <Command defaultValue={language}>
           <CommandList>
             <CommandGroup heading="Idioma">
               {languages.map((lang) => (

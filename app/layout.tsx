@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { cookies } from "next/headers";
 
 import { Geist, Roboto } from "next/font/google";
 
@@ -32,14 +33,18 @@ const geist = Geist({
   variable: "--font-geist-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get("language")?.value;
+  const initialLanguage = lang === "es" || lang === "en" ? lang : "en";
+
   return (
     <html
-      lang="es"
+      lang={initialLanguage}
       suppressHydrationWarning
       className={`${geist.variable} ${roboto.variable}`}
     >
@@ -54,9 +59,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LanguageProvider>
-            {children}
-          </LanguageProvider>
+          <LanguageProvider initialLanguage={initialLanguage}>{children}</LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

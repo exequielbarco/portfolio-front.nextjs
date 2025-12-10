@@ -23,7 +23,7 @@ export function Header({ navItems }: HeaderProps) {
           <div className="flex h-8 w-8 items-center justify-center rounded-full border text-sm font-bold bg-primary text-neutral-50">
             EB
           </div>
-          <span className="text-lg font-bold tracking-normal text-primary">
+          <span className="text-sm font-bold tracking-normal text-primary">
             exequielbarco.com
           </span>
         </Link>
@@ -52,7 +52,7 @@ export function Header({ navItems }: HeaderProps) {
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
-              <nav className="mt-4 flex flex-col gap-3 text-sm font-medium">
+              <nav className="mt-4 pl-4 flex flex-col gap-3 text-sm font-medium">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
