@@ -1,43 +1,18 @@
 services:
-  traefik:
-    image: traefik:v3.3
-    container_name: traefik-front
-    command:
-      - --providers.docker=true
-      - --providers.docker.exposedbydefault=false
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --certificatesresolvers.myresolver.acm.tlschallenge=true
-      - --certificatesresolvers.myresolver.acm.email=info@exequielbarco.com
-      - --certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - letsencrypt:letsencrypt
-    networks:
-      - proxy
-
-  portfolio:
+  frontend:
     image: ghcr.io/exequielbarco/portfolio-front.nextjs:latest
     container_name: portfolio-front.nextjs
-    env_file:
-      - .env_file
+    env_file: 
+    - .env
+    ports:
+      - "3000:3000"
     networks:
       - proxy
-    restart:
-      - always
-    labels:
-      - traefik.enable: "true"
-      - traefik.http.routers.portfolio.rule: "Host(`exequielbarco.com`)"
-      - traefik.http.routers.portfolio.entrypoints: "websecure"
-      - traefik.http.routers.portfolio.tls.certresolvers: "myresolver"
-      - traefik.http.services.portfolio.loadbalancer.server.port: "3000"
+    restart: unless-stopped
 
 networks:
   proxy:
     driver: bridge
 
 volumes:
-  letsencrypt
+  letsencrypt:
